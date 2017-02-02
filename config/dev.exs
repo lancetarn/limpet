@@ -33,6 +33,7 @@ config :logger, :console, format: "[$level] $message\n"
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
+
 # Configure your database
 config :limpet, Limpet.Repo,
   adapter: Ecto.Adapters.Postgres,
@@ -40,4 +41,5 @@ config :limpet, Limpet.Repo,
   password: "limpetpass",
   database: "limpet_dev",
   hostname: "localhost",
+  types: Limpet.PostgresTypes,
   pool_size: 10
