@@ -18,6 +18,7 @@ defmodule Limpet.Router do
 
     get "/", PageController, :index
     resources "/posts", PostController
+    post "/posts/:id", PostController, :update
   end
 
   # Other scopes may use custom stacks.

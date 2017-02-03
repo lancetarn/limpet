@@ -1,0 +1,18 @@
+<h2>Show post</h2>
+
+<ul>
+
+  <li>
+    <strong>Location:</strong>
+    <%= get_post_lat @post %>, <%= get_post_lng @post %>
+  </li>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @post.message %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: post_path(@conn, :edit, @post) %>
+<%= link "Back", to: post_path(@conn, :index) %>
