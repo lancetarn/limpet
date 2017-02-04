@@ -1,0 +1,8 @@
+<h2>Show post map</h2>
+
+<ul>
+
+</ul>
+
+<%= link "Edit", to: post_map_path(@conn, :edit, @post_map) %>
+<%= link "Back", to: post_map_path(@conn, :index) %>

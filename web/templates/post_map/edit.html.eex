@@ -1,0 +1,6 @@
+<h2>Edit post map</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: post_map_path(@conn, :update, @post_map) %>
+
+<%= link "Back", to: post_map_path(@conn, :index) %>

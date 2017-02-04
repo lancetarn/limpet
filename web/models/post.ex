@@ -1,6 +1,7 @@
 defmodule Limpet.Post do
   use Limpet.Web, :model
 
+  @derive {Poison.Encoder, only: [:message, :location]}
   schema "posts" do
     field :location, Geo.Point
     field :message, :string

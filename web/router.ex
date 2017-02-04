@@ -17,12 +17,16 @@ defmodule Limpet.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+
     resources "/posts", PostController
     post "/posts/:id", PostController, :update
+
+    resources "/post_maps", PostMapController
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Limpet do
-  #   pipe_through :api
-  # end
+   scope "/api", Limpet do
+     pipe_through :api
+     resources "/json_posts", JsonPostController, except: [:new, :edit]
+   end
 end
