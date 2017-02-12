@@ -115,3 +115,10 @@ can see the post we stuck in via iex. Now for everyone's favorite part: forms. I
 do with ajax/front-end frameworks at this point. The less the better, although I do want to play with web sockets
 at some point.
 
+Getting everything working with CRUD seemed to be easiest if I created another ecto schema, this time using `embedded_schema`
+as I wasn't going to persist anything. This will take form input with string lat/lng and validate it. If we
+convert to a valid Geo.Point, we map it over to the real Post and save it. After this I decided to generate API endpoints
+with `mix phoenix.gen.json --no-model`. This is actually simpler as I will expect incoming post requests to have json post
+body that contains a GeoJSON point in the `location` key.
+
+Now it is time to work with maps, via leaflet.

@@ -5,7 +5,6 @@ defmodule Limpet.PostMapController do
 
   def index(conn, _params) do
     posts = Repo.all(Post)
-    |> Enum.map(fn(post) -> %{post | location: Geo.JSON.encode(post.location)} end)
     case Poison.encode(posts) do
       {:ok, posts} ->
         render(conn, "index.html", json_posts: posts)

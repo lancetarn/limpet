@@ -10,7 +10,6 @@ defmodule Limpet.JsonPostController do
   end
 
   def create(conn, %{"json_post" => json_post_params}) do
-    %{json_post_params | location: Geo.JSON.decode(json_post_params.location)}
     changeset = Post.changeset(%Post{}, json_post_params)
 
     case Repo.insert(changeset) do

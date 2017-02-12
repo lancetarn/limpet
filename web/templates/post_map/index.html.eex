@@ -2,6 +2,14 @@
 
 <div id="map_container" style="height: 450px;">
 </div>
+
+<div id="controls">
+  <label>Lat:<span id="lat"></span></label>
+  <label>Lng:<span id="lng"></span></label>
+  <textarea id="message"></textarea>
+  <button id="submit" type="button" class="btn-default">POST</button>
+</div>
+
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
@@ -14,22 +22,52 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     id: 'tarnation.l05oo3k5',
     accessToken: 'pk.eyJ1IjoidGFybmF0aW9uIiwiYSI6Ik9haXpZaEEifQ.oRViHAfpfGV1ejJ_Harqvg'
 }).addTo(mymap);
-var popup = L.popup();
+var marker;
 function onMapClick(e) {
+  if (marker) {
+    marker.remove();
+  }
   jQuery("#lat").html(e.latlng.lat);
   jQuery("#lng").html(e.latlng.lng);
-  popup
-	  .setLatLng(e.latlng)
-      .setContent(jQuery('#message').val())
-	  .openOn(mymap);
+  marker = L.marker(e.latlng).addTo(mymap);
 }
 
 mymap.on('click', onMapClick);
+jQuery('#submit').on('click', submitPost);
+
+function getLocation() {
+  var lat = parseFloat(jQuery("#lat").html());
+  var lng = parseFloat(jQuery("#lng").html());
+  return {
+    'type': 'Point',
+    'coordinates': [lng, lat],
+    'crs':{'type':'name','properties':{'name':'4326'}}
+  };
+}
+
+function getMessage() {
+  return jQuery('#message').val();
+}
+
+function submitPost() {
+  var url = "/api/json_posts";
+  var data = JSON.stringify({
+    'json_post': {
+      'location': getLocation(),
+      'message': getMessage(),
+    }
+  });
+  var settings = {
+    'data': data,
+    'contentType': 'application/json',
+    'url': url,
+    'success': function(res, status, obj) {
+      alert(res);
+    }
+  }
+
+  jQuery.post(settings);
+
+}
 
 </script>
-
-<div id="controls">
-  <label>Lat:<span id="lat"></span></label>
-  <label>Lng:<span id="lng"></span></label>
-  <textarea id="message"></textarea>
-</div>
