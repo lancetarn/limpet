@@ -2,6 +2,8 @@ defmodule Limpet.Post do
   use Limpet.Web, :model
   require Logger
 
+  @web_mercator_srid 3857
+
   @derive {Poison.Encoder, only: [:message, :location]}
   schema "posts" do
     field :location, Geo.Point
@@ -33,7 +35,7 @@ defmodule Limpet.Post do
   defp convert_latlng(post, params) do
     case post do
       %{lat: lat, lng: lng, location: nil} ->
-        %{post | location: %Geo.Point{coordinates: {lng, lat}, srid: 4326}}
+        %{post | location: %Geo.Point{coordinates: {lng, lat}, srid: @web_mercator_srid}}
       _ ->
         post
     end
@@ -52,13 +54,6 @@ defmodule Limpet.Post do
   defimpl Poison.Encoder, for: Limpet.Post do
     def encode(post, options) do
       post = Limpet.Post.encode_post(post)
-      Poison.Encoder.Map.encode(Map.take(post, [:message, :location]), options)
-    end
-  end
-
-  defimpl Poison.Decoder, for: Limpet.Post do
-    def decode(post, options) do
-      post = Limpet.Post.decode_post(post)
       Poison.Encoder.Map.encode(Map.take(post, [:message, :location]), options)
     end
   end
