@@ -7,17 +7,16 @@ exports.config = {
       // To use a separate vendor.js bundle, specify two files path
       // http://brunch.io/docs/config#-files-
       // joinTo: {
-      //  "js/app.js": /^(web\/static\/js)/,
-      //  "js/vendor.js": /^(web\/static\/vendor)|(deps)/
-      // }
+      //   "js/app.js": /^(web\/static\/js)/,
+      //   "js/vendor.js": /^(web\/static\/vendor)|(deps)|(node_modules)/
+      // },
       //
       // To change the order of concatenation of files, explicitly mention here
       // order: {
       //   before: [
       //     "web/static/vendor/js/jquery-2.1.1.js",
       //     "web/static/vendor/js/bootstrap.min.js"
-      //   ]
-      // }
+      //   ] // }
     },
     stylesheets: {
       joinTo: "css/app.css",
@@ -62,8 +61,13 @@ exports.config = {
       "js/app.js": ["web/static/js/app"]
     }
   },
-
   npm: {
+    styles: {leaflet: ["dist/leaflet.css"]},
+    globals: {
+      L: 'leaflet',
+      LD: 'leaflet-draw'
+    },
     enabled: true
   }
+
 };
