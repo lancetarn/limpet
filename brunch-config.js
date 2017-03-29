@@ -62,12 +62,16 @@ exports.config = {
     }
   },
   npm: {
-    styles: {leaflet: ["dist/leaflet.css"]},
+    styles: {
+      leaflet: ["dist/leaflet.css"],
+      "leaflet-draw": ["dist/leaflet.draw.css" ]
+    },
     globals: {
       L: 'leaflet',
       LD: 'leaflet-draw'
     },
     enabled: true
-  }
+  },
+  postinstall: "rsync node_modules/leaflet-draw/dist/images/ web/static/css/images"
 
 };
