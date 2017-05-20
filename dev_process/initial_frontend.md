@@ -1,7 +1,7 @@
 ## Mapping
 
 
-Mapping feels so easy these days
+Mapping feels so easy these days. Leaflet-draw is awesome for drawing coordinates
 
 ## Quick 'n' dirty: jQuery
 

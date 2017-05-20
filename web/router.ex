@@ -28,5 +28,6 @@ defmodule Limpet.Router do
    scope "/api", Limpet do
      pipe_through :api
      resources "/json_posts", JsonPostController, except: [:new, :edit]
+     resources "/area_posts", AreaPostsController, except: [:new, :edit]
    end
 end

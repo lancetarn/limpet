@@ -20,6 +20,6 @@ defmodule Limpet.FormPost do
 
   def to_post(changeset) do
     form_post = apply_changes(changeset)
-    %Limpet.Post{location: %Geo.Point{coordinates: {form_post.lng, form_post.lat}, srid: 4326}, message: form_post.message}
+    %Limpet.Post{location: %Geo.Point{coordinates: {form_post.lng, form_post.lat}, srid: Limpet.Post.web_mercator_srid }, message: form_post.message}
   end
 end

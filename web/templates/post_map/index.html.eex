@@ -13,9 +13,9 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
 // Web Mercator projection
-var MAPBOX_SRID = '3857';
+var MAPBOX_SRID = 3857;
 
-$(document).ready( function() {
+jQuery(document).ready( function() {
 
   var posts = <%= raw(@json_posts)%>;
   var mymap = L.map('map_container').setView([38.1496, -79.0717], 13);
@@ -46,7 +46,15 @@ $(document).ready( function() {
     marker = L.marker(e.latlng).addTo(mymap);
   }
 
+  function onCreatePolygon(e) {
+    drawnItems.addLayer(e.layer);
+    var geojson = drawnItems.toGeoJSON();
+    searchPosts(geojson);
+
+  }
+
   mymap.on('click', onMapClick);
+  mymap.on(L.Draw.Event.CREATED, onCreatePolygon)
   jQuery('#submit').on('click', submitPost);
 
   function getLocation() {
@@ -83,6 +91,22 @@ $(document).ready( function() {
     jQuery.post(settings);
 
   }
+
+  function searchPosts(geojson) {
+    var url = '/api/area_posts';
+    var geom = geojson.features[0].geometry;
+    geom.crs = {"type": "name", "properties": {"name": MAPBOX_SRID}};
+    var json = JSON.stringify(geom);
+    console.log(json);
+    var params = {'geojson': json};
+//      "type": geojson.features[0].geometry.type,
+//      "coordinates": geojson.features[0].geometry.coordinates[0] }}
+    jQuery.get(url, params, function(res) {
+      console.log(res);
+    });
+  }
+
+    
 });
 
 </script>
