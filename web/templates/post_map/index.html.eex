@@ -64,6 +64,9 @@ jQuery(document).ready( function() {
   }
 
   function onCreatePolygon(e) {
+    if (marker) {
+      marker.remove();
+    }
     drawnItems.addLayer(e.layer);
     var geojson = drawnItems.toGeoJSON();
     searchPosts(geojson);
