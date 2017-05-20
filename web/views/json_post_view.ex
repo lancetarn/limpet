@@ -10,6 +10,6 @@ defmodule Limpet.JsonPostView do
   end
 
   def render("json_post.json", %{json_post: json_post}) do
-    %{id: json_post.id}
+    json_post
   end
 end
