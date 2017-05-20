@@ -5,11 +5,6 @@ defmodule Limpet.AreaPostsController do
 
   alias Limpet.Post
 
-  def index(conn, {}) do
-    area_posts = Repo.all()
-    render(conn, "index.json", area_posts: area_posts)
-  end
-
   def index(conn, params) do
     area = polygon_from_params(params)
     query = from p in Post,
