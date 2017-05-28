@@ -8,6 +8,7 @@ defmodule Limpet.Post do
   schema "posts" do
     field :location, Geo.Point
     field :message, :string
+    field :is_encrypted, :boolean, [default: false]
 
     timestamps()
   end
