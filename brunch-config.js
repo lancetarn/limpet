@@ -63,6 +63,7 @@ exports.config = {
   },
   npm: {
     styles: {
+      boostrap: ["dist/css/bootstrap.css", "dist/css/bootstrap-theme.css"],
       leaflet: ["dist/leaflet.css"],
       "leaflet-draw": ["dist/leaflet.draw.css" ]
     },

@@ -6,6 +6,9 @@
     "watch": "brunch watch --stdin"
   },
   "dependencies": {
+    "bootstrap": "^3.3.7",
+    "handlebars": "^4.0.10",
+    "jquery": "^3.2.1",
     "leaflet": "^1.0.3",
     "leaflet-draw": "^0.4.9",
     "phoenix": "file:deps/phoenix",

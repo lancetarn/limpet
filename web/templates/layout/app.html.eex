@@ -9,9 +9,6 @@
 
     <title>Limpet</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <!-- Hacks for quick leaflet -->
-     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-     <!-- END -->
   </head>
 
   <body>
@@ -19,10 +16,8 @@
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
           </ul>
         </nav>
-        <span class="logo"></span>
       </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

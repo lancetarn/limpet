@@ -123,12 +123,8 @@ jQuery(document).ready( function() {
     var geom = geojson.features[0].geometry;
     geom.crs = {"type": "name", "properties": {"name": MAPBOX_SRID}};
     var json = JSON.stringify(geom);
-    console.log(json);
     var params = {'geojson': json};
-//      "type": geojson.features[0].geometry.type,
-//      "coordinates": geojson.features[0].geometry.coordinates[0] }}
     jQuery.get(url, params, function(res) {
-      console.log(res);
       renderPosts({'posts': res.data});
     });
   }
@@ -137,10 +133,8 @@ jQuery(document).ready( function() {
     var source   = jQuery('#posts-template').html();
     var template = Handlebars.compile(source);
     var html = template(posts);
-    console.log(html);
     jQuery('#post_list').html(html);
   }
-    
 });
 
 </script>
