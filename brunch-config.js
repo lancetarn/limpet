@@ -68,8 +68,8 @@ exports.config = {
       "leaflet-draw": ["dist/leaflet.draw.css" ]
     },
     globals: {
-      L: 'leaflet',
-      LD: 'leaflet-draw'
+      // L: 'leaflet',
+      // LD: 'leaflet-draw'
     },
     enabled: true
   },
