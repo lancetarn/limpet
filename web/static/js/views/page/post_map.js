@@ -1,7 +1,5 @@
-// web/static/js/views/page/new.js
-
+// web/static/js/views/page/post_map.js
 import MainView from '../main';
-import jQuery from "jquery";
 import L from "leaflet";
 import "leaflet-draw";
 import Handlebars from "handlebars";
@@ -11,16 +9,10 @@ export default class PagePostMapView extends MainView {
     super.mount();
     var h = new MapHandler();
     h.init();
-
-    // Specific logic here
-    console.log('PagePostAddView mounted');
   }
 
   unmount() {
     super.unmount();
-
-    // Specific logic here
-    console.log('PagePostAddView unmounted');
   }
 }
 

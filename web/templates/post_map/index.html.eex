@@ -1,17 +1,28 @@
-<h2>Listing Posts</h2>
+<h2>Posts</h2>
 
 <div id="map_container" style="height: 450px;">
 </div>
-
-<div id="controls">
-  <label>Lat:<span id="lat"></span></label>
-  <label>Lng:<span id="lng"></span></label>
-  <textarea id="message"></textarea>
-  <button id="submit" type="button" class="btn-default">POST</button>
-</div>
 <hr />
-<h2>Area Posts</h2>
-<div id="post_list">
+
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a href="#add-post" role="tab" data-toggle="tab">Add Post</a></li>
+  <li role="presentation"><a href="#search-posts" role="tab" data-toggle="tab">Search Posts</a></li>
+</ul>
+
+<div id="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="add-post">
+    <h2>Add Post</h2>
+    <div id="controls">
+      <label>Lat:<span id="lat"></span></label>
+      <label>Lng:<span id="lng"></span></label>
+      <textarea class="form-control" id="message"></textarea>
+      <button id="submit" class="btn btn-primary" type="button" class="btn-default">Create</button>
+    </div>
+  </div>
+  <div role="tabpanel" class="tab-pane fade" id="search-posts">
+    <h2>Area Posts</h2>
+    <div id="post_list"> </div>
+  </div>
 </div>
 
 <script id="posts-template" type="text/x-handlebars-template">
