@@ -13,8 +13,7 @@ defmodule Limpet.JsonPostController do
 
   def create(conn, %{"json_post" => json_post_params}) do
 
-    params = handle_post_encryption(json_post_params)
-    Logger.debug("Processed params: #{inspect(params)}")
+    params = encrypt_post(json_post_params)
     changeset = Post.changeset(%Post{}, params)
 
     case Repo.insert(changeset) do
@@ -32,7 +31,6 @@ defmodule Limpet.JsonPostController do
 
   def show(conn, %{"id" => id}) do
     json_post = Repo.get!(Post, id)
-    json_post = %{json_post | location: Geo.JSON.encode(json_post.location)}
     render(conn, "show.json", json_post: json_post)
   end
 
@@ -61,7 +59,12 @@ defmodule Limpet.JsonPostController do
     send_resp(conn, :no_content, "")
   end
 
-  defp handle_post_encryption(params) do
+  def decrypt_message(conn, %{"id" => id, "password" => password}) do
+    json_post = Repo.get!(Post, id) |> decrypt_post(password)
+    render(conn, "show.json", json_post: json_post)
+  end
+
+  defp encrypt_post(params) do
     case params["is_encrypted"] do
       true ->
         Map.put(params, "message", Secrets.encrypt(params["message"], params["password"]))
@@ -70,4 +73,13 @@ defmodule Limpet.JsonPostController do
     end
   end
 
+  defp decrypt_post(post, password) do
+    Logger.debug("Post... #{inspect(post)}")
+    case post.is_encrypted do
+      true ->
+        %{post | message: Secrets.decrypt(post.message, password)}
+      _ ->
+        post
+    end
+  end
 end
