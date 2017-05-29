@@ -48,6 +48,7 @@ class MapHandler {
       draw: false
   });
 
+  // Marker for post locations
   var marker;
 
 
@@ -72,6 +73,7 @@ class MapHandler {
     drawControlEditOnly.addTo(mymap)
   }
 
+  // Map setup
   mymap.on("draw:deleted", function(e) {
     drawControlEditOnly.remove(mymap);
     drawControlFull.addTo(mymap);
@@ -79,6 +81,12 @@ class MapHandler {
   mymap.on('click', onMapClick);
   mymap.on(L.Draw.Event.CREATED, onCreatePolygon)
   jQuery('#submit').on('click', submitPost);
+
+  // Encryption controls
+  jQuery('#is-encrypted').click(function(e) {
+      jQuery('#pass-group').toggleClass('hide');
+  });
+
 
   function getLocation() {
     var lat = parseFloat(jQuery("#lat").html());
@@ -96,12 +104,21 @@ class MapHandler {
 
   function submitPost() {
     var url = "/api/json_posts";
-    var data = JSON.stringify({
-      'json_post': {
+    var data = {
         'location': getLocation(),
         'message': getMessage(),
+        'is_encrypted': getIsEnctypted(),
       }
-    });
+      if ( data.is_encrypted ) {
+          if ( passwordsMatch() ) {
+              data.password = getPassword();
+          }
+          else {
+              return showUnmatchedPasswordsMessage();
+          }
+      }
+    date = JSON.stringify({'json_post': data});
+
     var settings = {
       'data': data,
       'contentType': 'application/json',
@@ -113,6 +130,25 @@ class MapHandler {
 
     jQuery.post(settings);
 
+  }
+
+  function getIsEncrypted() {
+      return jQuery('#is-encrypted').checked();
+  }
+
+  function getPassword() {
+      return jQuery('#pass-field').value();
+  }
+
+  function passwordsMatch() {
+      var pass = jQuery('#pass-field').value();
+      var conf = jQuery('#pass-confirm').value();
+      return ( pass != '' && pass == conf );
+  }
+
+  function showUnmatchedPasswordsMessage() {
+      var msg = "Passwords must be non-empty and match";
+      jQuery('p.alert-danger').html(msg);
   }
 
   function searchPosts(geojson) {
