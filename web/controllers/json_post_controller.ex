@@ -1,7 +1,9 @@
 defmodule Limpet.JsonPostController do
   use Limpet.Web, :controller
+  require Logger
 
   alias Limpet.Post
+  alias Limpet.Secrets
 
   def index(conn, _params) do
     json_posts = Repo.all(Post)
@@ -10,7 +12,10 @@ defmodule Limpet.JsonPostController do
   end
 
   def create(conn, %{"json_post" => json_post_params}) do
-    changeset = Post.changeset(%Post{}, json_post_params)
+
+    params = handle_post_encryption(json_post_params)
+    Logger.debug("Processed params: #{inspect(params)}")
+    changeset = Post.changeset(%Post{}, params)
 
     case Repo.insert(changeset) do
       {:ok, json_post} ->
@@ -55,4 +60,14 @@ defmodule Limpet.JsonPostController do
 
     send_resp(conn, :no_content, "")
   end
+
+  defp handle_post_encryption(params) do
+    case params["is_encrypted"] do
+      true ->
+        Map.put(params, "message", Secrets.encrypt(params["message"], params["password"]))
+      _ ->
+        params
+    end
+  end
+
 end

@@ -103,11 +103,12 @@ class MapHandler {
   }
 
   function submitPost() {
+    clearErrorMessage();
     var url = "/api/json_posts";
     var data = {
         'location': getLocation(),
         'message': getMessage(),
-        'is_encrypted': getIsEnctypted(),
+        'is_encrypted': getIsEncrypted(),
       }
       if ( data.is_encrypted ) {
           if ( passwordsMatch() ) {
@@ -117,7 +118,7 @@ class MapHandler {
               return showUnmatchedPasswordsMessage();
           }
       }
-    date = JSON.stringify({'json_post': data});
+    data = JSON.stringify({'json_post': data});
 
     var settings = {
       'data': data,
@@ -133,22 +134,29 @@ class MapHandler {
   }
 
   function getIsEncrypted() {
-      return jQuery('#is-encrypted').checked();
+      return jQuery('#is-encrypted').is(':checked');
   }
 
   function getPassword() {
-      return jQuery('#pass-field').value();
+      return jQuery('#pass-field').val();
   }
 
   function passwordsMatch() {
-      var pass = jQuery('#pass-field').value();
-      var conf = jQuery('#pass-confirm').value();
+      var pass = jQuery('#pass-field').val();
+      var conf = jQuery('#pass-confirm').val();
       return ( pass != '' && pass == conf );
   }
 
   function showUnmatchedPasswordsMessage() {
-      var msg = "Passwords must be non-empty and match";
+      showErrorMessage("Passwords must be non-empty and match");
+  }
+
+  function showErrorMessage(msg) {
       jQuery('p.alert-danger').html(msg);
+  }
+
+  function clearErrorMessage() {
+      jQuery('p.alert-danger').html('');
   }
 
   function searchPosts(geojson) {
