@@ -2,17 +2,17 @@ defmodule Limpet.PostTest do
   use Limpet.ModelCase
 
   alias Limpet.Post
-
-  @valid_attrs %{location: "some content", message: "some content"}
-  @invalid_attrs %{}
+  require Logger
 
   test "changeset with valid attributes" do
-    changeset = Post.changeset(%Post{}, @valid_attrs)
+    valid = %{location: %{"coordinates" => [45.1, -12.1], "crs" => %{"properties" => %{"name" => 3857}, "type" => "name"}, "type" => "Point"}, message: "some content", is_encrypted: true}
+    changeset = Post.changeset(%Post{}, valid)
     assert changeset.valid?
   end
 
   test "changeset with invalid attributes" do
-    changeset = Post.changeset(%Post{}, @invalid_attrs)
+    invalid = %{location: %{"coordinates" => [nil, nil], "crs" => %{"properties" => %{"name" => 3857}, "type" => "name"}, "type" => "Point"}, is_encrypted: true}
+    changeset = Post.changeset(%Post{}, invalid)
     refute changeset.valid?
   end
 end

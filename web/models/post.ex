@@ -20,7 +20,7 @@ defmodule Limpet.Post do
     Logger.debug "Post: #{inspect(params)}"
     struct
     |> convert_latlng(params)
-    |> cast(params, [:location, :message])
+    |> cast(params, [:location, :message, :is_encrypted])
     |> validate_required([:location, :message])
     |> enforce_valid_point
   end
@@ -42,20 +42,27 @@ defmodule Limpet.Post do
     end
   end
 
+  @doc """
+  Ensure we have valid lat/lng if :location is a point
+  """
   defp enforce_valid_point(changeset) do
     Logger.debug "Changeset: #{inspect(changeset)}"
-    {:ok, location} = fetch_change(changeset, :location)
-    if is_float(elem(location.coordinates, 0)) && is_float(elem(location.coordinates, 1)) do
+    case fetch_change(changeset, :location) do
+    {:ok, location} ->
+      if is_float(elem(location.coordinates, 0)) && is_float(elem(location.coordinates, 1)) do
+        changeset
+      else
+        %{changeset | errors: changeset.errors ++ [{:location, {"Location contains invalid coordinates"}, []}], valid?: :false}
+      end
+    :error ->
       changeset
-    else
-      %{changeset | errors: changeset.errors ++ [{:location, {"Location contains invalid coordinates"}, []}], valid?: :false}
     end
   end
 
   defimpl Poison.Encoder, for: Limpet.Post do
     def encode(post, options) do
       post = Limpet.Post.encode_post(post)
-      Poison.Encoder.Map.encode(Map.take(post, [:message, :location]), options)
+      Poison.Encoder.Map.encode(Map.take(post, [:message, :location, :is_encrypted]), options)
     end
   end
 

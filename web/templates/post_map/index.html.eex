@@ -1,54 +1,26 @@
 <h2>Posts</h2>
 
-<div id="map_container" style="height: 450px;">
-</div>
-<hr />
-
-<ul class="nav nav-tabs" role="tablist">
-  <li role="presentation" class="active"><a href="#add-post" role="tab" data-toggle="tab">Add Post</a></li>
-  <li role="presentation"><a href="#search-posts" role="tab" data-toggle="tab">Search Posts</a></li>
-</ul>
-
-<div id="tab-content">
-  <div role="tabpanel" class="tab-pane fade in active" id="add-post">
-    <h2>Add Post</h2>
-    <div id="controls">
-      <label>Lat:<span id="lat"></span></label>
-      <label>Lng:<span id="lng"></span></label>
-      <textarea class="form-control" id="message"></textarea>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" id="is-encrypted">Encrypt</input>
-        </label>
-      </div>
-      <div class="form-group hide" id="pass-group">
-        <label for="pass-field">Password</label>
-        <input type="password" class="form-control" id="pass-field" />
-        <label for="pass-confirm">Confirm Password</label>
-        <input type="password" class="form-control" id="pass-confirm" />
-      </div>
-      <button id="submit" class="btn btn-primary" type="button" class="btn-default">Create</button>
-    </div>
-  </div>
-  <div role="tabpanel" class="tab-pane fade" id="search-posts">
-    <h2>Area Posts</h2>
-    <div id="post_list"> </div>
-  </div>
-</div>
+<div class="container-fluid">
+<div id="map_container" style="height: 450px;" class="col-md-8"></div>
+<div id="post_list" class="col-md-4"></div>
 
 <script id="posts-template" type="text/x-handlebars-template">
-  <ul>
   {{#each posts}}
-  <li class="post">
+  <ul class="list-group">
+  <li class="post list-group-item">
     Location:
-    <ul>
-      <li>Lat: {{lookup location.coordinates 1}}</li>
-      <li>Lng: {{lookup location.coordinates 0}}</li>
+    <ul class="list-group">
+      <li class="list-group-item">Lat: {{lookup location.coordinates 1}}</li>
+      <li class="list-group-item">Lng: {{lookup location.coordinates 0}}</li>
     </ul>
   </li>
-  <li>Message:
-    <p>{{message}}</p>
+  <li class="list-group-item">Message:
+    {{#if is_encrypted}}
+      <button class="btn btn-xs btn-default">Decrypt</button>
+    {{else}}
+      <p>{{message}}</p>
+    {{/if}}
   </li>
-  {{/each}}
   </ul>
+  {{/each}}
 </script>

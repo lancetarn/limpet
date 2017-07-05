@@ -74,7 +74,6 @@ defmodule Limpet.JsonPostController do
   end
 
   defp decrypt_post(post, password) do
-    Logger.debug("Post... #{inspect(post)}")
     case post.is_encrypted do
       true ->
         %{post | message: Secrets.decrypt(post.message, password)}

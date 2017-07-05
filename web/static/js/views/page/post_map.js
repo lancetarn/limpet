@@ -36,7 +36,8 @@ class MapHandler {
       featureGroup: drawnItems
     },
     draw: {
-      polyline: false
+      polyline: false,
+      circle: false
     }
   });
   mymap.addControl(drawControlFull);
@@ -48,23 +49,7 @@ class MapHandler {
       draw: false
   });
 
-  // Marker for post locations
-  var marker;
-
-
-  function onMapClick(e) {
-    if (marker) {
-      marker.remove();
-    }
-    jQuery("#lat").html(e.latlng.lat);
-    jQuery("#lng").html(e.latlng.lng);
-    marker = L.marker(e.latlng).addTo(mymap);
-  }
-
   function onCreatePolygon(e) {
-    if (marker) {
-      marker.remove();
-    }
     drawnItems.addLayer(e.layer);
     var geojson = drawnItems.toGeoJSON();
     searchPosts(geojson);
@@ -78,86 +63,8 @@ class MapHandler {
     drawControlEditOnly.remove(mymap);
     drawControlFull.addTo(mymap);
   });
-  mymap.on('click', onMapClick);
   mymap.on(L.Draw.Event.CREATED, onCreatePolygon)
-  jQuery('#submit').on('click', submitPost);
 
-  // Encryption controls
-  jQuery('#is-encrypted').click(function(e) {
-      jQuery('#pass-group').toggleClass('hide');
-  });
-
-
-  function getLocation() {
-    var lat = parseFloat(jQuery("#lat").html());
-    var lng = parseFloat(jQuery("#lng").html());
-    return {
-      'type': 'Point',
-      'coordinates': [lng, lat],
-      'crs':{'type':'name','properties':{'name':MAPBOX_SRID}}
-    };
-  }
-
-  function getMessage() {
-    return jQuery('#message').val();
-  }
-
-  function submitPost() {
-    clearErrorMessage();
-    var url = "/api/json_posts";
-    var data = {
-        'location': getLocation(),
-        'message': getMessage(),
-        'is_encrypted': getIsEncrypted(),
-      }
-      if ( data.is_encrypted ) {
-          if ( passwordsMatch() ) {
-              data.password = getPassword();
-          }
-          else {
-              return showUnmatchedPasswordsMessage();
-          }
-      }
-    data = JSON.stringify({'json_post': data});
-
-    var settings = {
-      'data': data,
-      'contentType': 'application/json',
-      'url': url,
-      'success': function(res, status, obj) {
-        console.log(res);
-      }
-    }
-
-    jQuery.post(settings);
-
-  }
-
-  function getIsEncrypted() {
-      return jQuery('#is-encrypted').is(':checked');
-  }
-
-  function getPassword() {
-      return jQuery('#pass-field').val();
-  }
-
-  function passwordsMatch() {
-      var pass = jQuery('#pass-field').val();
-      var conf = jQuery('#pass-confirm').val();
-      return ( pass != '' && pass == conf );
-  }
-
-  function showUnmatchedPasswordsMessage() {
-      showErrorMessage("Passwords must be non-empty and match");
-  }
-
-  function showErrorMessage(msg) {
-      jQuery('p.alert-danger').html(msg);
-  }
-
-  function clearErrorMessage() {
-      jQuery('p.alert-danger').html('');
-  }
 
   function searchPosts(geojson) {
     var url = '/api/area_posts';
@@ -171,6 +78,7 @@ class MapHandler {
   }
 
   function renderPosts(posts) {
+      console.log(posts);
     var source   = jQuery('#posts-template').html();
     var template = Handlebars.compile(source);
     var html = template(posts);
